@@ -1,4 +1,4 @@
-package com.platforma.payments;
+package com.platform.payments;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
