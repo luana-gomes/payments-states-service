@@ -8,7 +8,7 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.plataforma</groupId>
+	<groupId>com.platform</groupId>
 	<artifactId>payments-states-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>payments-states-service</name>
