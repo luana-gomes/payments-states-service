@@ -229,7 +229,7 @@ class PaymentOperationTest {
 
         assertEquals("1010", operation.getExternalReferenceId());
         assertEquals("001", operation.getPaymentId());
-        assertEquals("ABW1067R", operation.getProtocol());
+        assertEquals("ABW1067R", operation.getOrderId());
         assertEquals(OperationType.AUTHORIZATION, operation.getOperationType());
         assertEquals(PaymentsStatus.PENDING, operation.getStatus());
         assertEquals(now, operation.getCreatedAt());
@@ -253,7 +253,7 @@ class PaymentOperationTest {
 
         assertEquals("1011", operation.getExternalReferenceId());
         assertEquals("001", operation.getPaymentId());
-        assertEquals("ABW1067R", operation.getProtocol());
+        assertEquals("ABW1067R", operation.getOrderId());
         assertEquals(OperationType.CAPTURE, operation.getOperationType());
         assertEquals(PaymentsStatus.PENDING, operation.getStatus());
         assertEquals(now, operation.getCreatedAt());
@@ -286,8 +286,8 @@ class PaymentOperationTest {
         );
 
         assertEquals(
-                authorization.getProtocol(),
-                capture.getProtocol()
+                authorization.getOrderId(),
+                capture.getOrderId()
         );
 
         assertEquals(

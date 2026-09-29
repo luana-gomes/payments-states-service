@@ -3,3 +3,4 @@ target/
 *.iml
 .vscode/
 *.class
+src/main/resources/application-local.properties
