@@ -18,5 +18,8 @@ CREATE TABLE public.payment_operation (
 
     CONSTRAINT fk_payment_operation_tenant
         FOREIGN KEY (tenant_id)
-        REFERENCES public.tenant (id)
+        REFERENCES public.tenant (id),
+
+    CONSTRAINT uq_payment_operation_card_type
+        UNIQUE (payment_card_id, operation_type)
 );
