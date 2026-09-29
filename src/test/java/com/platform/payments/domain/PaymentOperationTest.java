@@ -1,23 +1,31 @@
 package com.platform.payments.domain;
 
 import org.junit.jupiter.api.Test;
+
 import java.time.OffsetDateTime;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PaymentOperationTest {
 
+    private static final Long PAYMENT_CARD_ID = 10500L;
+    private static final UUID TENANT_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
     @Test
-    void shouldRejectBlankExternalReferenceId() {
+    void shouldRejectNullPaymentCardId() {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
                 () -> new PaymentOperation(
-                        "",
-                        "001",
-                        "ABW1067R",
+                        null,
+                        TENANT_ID,
+                        "1015",
+                        "MP",
                         OperationType.AUTHORIZATION,
                         PaymentsStatus.PENDING,
                         now,
@@ -26,22 +34,23 @@ class PaymentOperationTest {
         );
 
         assertEquals(
-                "externalReferenceId must not be blank",
+                "paymentCardId must not be null",
                 exception.getMessage()
         );
     }
 
     @Test
-    void shouldRejectBlankPaymentId() {
+    void shouldRejectNullTenantId() {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
                 () -> new PaymentOperation(
-                        "1010",
-                        "",
-                        "ABW1067R",
+                        PAYMENT_CARD_ID,
+                        null,
+                        "1015",
+                        "MP",
                         OperationType.AUTHORIZATION,
                         PaymentsStatus.PENDING,
                         now,
@@ -50,90 +59,29 @@ class PaymentOperationTest {
         );
 
         assertEquals(
-                "paymentId must not be blank",
+                "tenantId must not be null",
                 exception.getMessage()
         );
     }
 
     @Test
-    void shouldRejectBlankProtocol() {
+    void shouldAllowNullExternalReferenceIdAndAcquirer() {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        "",
-                        OperationType.AUTHORIZATION,
-                        PaymentsStatus.PENDING,
-                        now,
-                        now
-                )
+        PaymentOperation operation = new PaymentOperation(
+                PAYMENT_CARD_ID,
+                TENANT_ID,
+                null,
+                null,
+                OperationType.AUTHORIZATION,
+                PaymentsStatus.PENDING,
+                now,
+                now
         );
 
-        assertEquals(
-                "protocol must not be blank",
-                exception.getMessage()
-        );
-    }
-
-    @Test
-    void shouldRejectNullExternalReferenceId() {
-
-        OffsetDateTime now = OffsetDateTime.now();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new PaymentOperation(
-                        null,
-                        "001",
-                        "ABW1067R",
-                        OperationType.AUTHORIZATION,
-                        PaymentsStatus.PENDING,
-                        now,
-                        now
-                )
-        );
-    }
-
-    @Test
-    void shouldRejectNullPaymentId() {
-
-        OffsetDateTime now = OffsetDateTime.now();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new PaymentOperation(
-                        "1010",
-                        null,
-                        "ABW1067R",
-                        OperationType.AUTHORIZATION,
-                        PaymentsStatus.PENDING,
-                        now,
-                        now
-                )
-        );
-    }
-
-    @Test
-    void shouldRejectNullProtocol() {
-
-        OffsetDateTime now = OffsetDateTime.now();
-
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        null,
-                        OperationType.AUTHORIZATION,
-                        PaymentsStatus.PENDING,
-                        now,
-                        now
-                )
-        );
+        assertNull(operation.getExternalReferenceId());
+        assertNull(operation.getAcquirer());
     }
 
     @Test
@@ -141,17 +89,23 @@ class PaymentOperationTest {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        assertThrows(
+        NullPointerException exception = assertThrows(
                 NullPointerException.class,
                 () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        "ABW1067R",
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        "1015",
+                        "MP",
                         null,
                         PaymentsStatus.PENDING,
                         now,
                         now
                 )
+        );
+
+        assertEquals(
+                "operationType must not be null",
+                exception.getMessage()
         );
     }
 
@@ -160,17 +114,23 @@ class PaymentOperationTest {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        assertThrows(
+        NullPointerException exception = assertThrows(
                 NullPointerException.class,
                 () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        "ABW1067R",
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        "1015",
+                        "MP",
                         OperationType.AUTHORIZATION,
                         null,
                         now,
                         now
                 )
+        );
+
+        assertEquals(
+                "status must not be null",
+                exception.getMessage()
         );
     }
 
@@ -179,17 +139,23 @@ class PaymentOperationTest {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        assertThrows(
+        NullPointerException exception = assertThrows(
                 NullPointerException.class,
                 () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        "ABW1067R",
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        "1015",
+                        "MP",
                         OperationType.AUTHORIZATION,
                         PaymentsStatus.PENDING,
                         null,
                         now
                 )
+        );
+
+        assertEquals(
+                "createdAt must not be null",
+                exception.getMessage()
         );
     }
 
@@ -198,17 +164,23 @@ class PaymentOperationTest {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        assertThrows(
+        NullPointerException exception = assertThrows(
                 NullPointerException.class,
                 () -> new PaymentOperation(
-                        "1010",
-                        "001",
-                        "ABW1067R",
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        "1015",
+                        "MP",
                         OperationType.AUTHORIZATION,
                         PaymentsStatus.PENDING,
                         now,
                         null
                 )
+        );
+
+        assertEquals(
+                "updatedAt must not be null",
+                exception.getMessage()
         );
     }
 
@@ -218,18 +190,20 @@ class PaymentOperationTest {
         OffsetDateTime now = OffsetDateTime.now();
 
         PaymentOperation operation = new PaymentOperation(
-                "1010",
-                "001",
-                "ABW1067R",
+                PAYMENT_CARD_ID,
+                TENANT_ID,
+                "1015",
+                "MP",
                 OperationType.AUTHORIZATION,
                 PaymentsStatus.PENDING,
                 now,
                 now
         );
 
-        assertEquals("1010", operation.getExternalReferenceId());
-        assertEquals("001", operation.getPaymentId());
-        assertEquals("ABW1067R", operation.getOrderId());
+        assertEquals(PAYMENT_CARD_ID, operation.getPaymentCardId());
+        assertEquals(TENANT_ID, operation.getTenantId());
+        assertEquals("1015", operation.getExternalReferenceId());
+        assertEquals("MP", operation.getAcquirer());
         assertEquals(OperationType.AUTHORIZATION, operation.getOperationType());
         assertEquals(PaymentsStatus.PENDING, operation.getStatus());
         assertEquals(now, operation.getCreatedAt());
@@ -242,18 +216,20 @@ class PaymentOperationTest {
         OffsetDateTime now = OffsetDateTime.now();
 
         PaymentOperation operation = new PaymentOperation(
-                "1011",
-                "001",
-                "ABW1067R",
+                PAYMENT_CARD_ID,
+                TENANT_ID,
+                "1016",
+                "MP",
                 OperationType.CAPTURE,
                 PaymentsStatus.PENDING,
                 now,
                 now
         );
 
-        assertEquals("1011", operation.getExternalReferenceId());
-        assertEquals("001", operation.getPaymentId());
-        assertEquals("ABW1067R", operation.getOrderId());
+        assertEquals(PAYMENT_CARD_ID, operation.getPaymentCardId());
+        assertEquals(TENANT_ID, operation.getTenantId());
+        assertEquals("1016", operation.getExternalReferenceId());
+        assertEquals("MP", operation.getAcquirer());
         assertEquals(OperationType.CAPTURE, operation.getOperationType());
         assertEquals(PaymentsStatus.PENDING, operation.getStatus());
         assertEquals(now, operation.getCreatedAt());
@@ -261,14 +237,15 @@ class PaymentOperationTest {
     }
 
     @Test
-    void shouldCreateAuthorizationAndCaptureWithSameProtocol() {
+    void shouldCreateAuthorizationAndCaptureForSamePaymentCard() {
 
         OffsetDateTime now = OffsetDateTime.now();
 
         PaymentOperation authorization = new PaymentOperation(
-                "1012",
-                "001",
-                "ABW1067R",
+                PAYMENT_CARD_ID,
+                TENANT_ID,
+                "1015",
+                "MP",
                 OperationType.AUTHORIZATION,
                 PaymentsStatus.PENDING,
                 now,
@@ -276,9 +253,10 @@ class PaymentOperationTest {
         );
 
         PaymentOperation capture = new PaymentOperation(
-                "1013",
-                "001",
-                "ABW1067R",
+                PAYMENT_CARD_ID,
+                TENANT_ID,
+                "1016",
+                "MP",
                 OperationType.CAPTURE,
                 PaymentsStatus.PENDING,
                 now,
@@ -286,8 +264,13 @@ class PaymentOperationTest {
         );
 
         assertEquals(
-                authorization.getOrderId(),
-                capture.getOrderId()
+                authorization.getPaymentCardId(),
+                capture.getPaymentCardId()
+        );
+
+        assertEquals(
+                authorization.getTenantId(),
+                capture.getTenantId()
         );
 
         assertEquals(
