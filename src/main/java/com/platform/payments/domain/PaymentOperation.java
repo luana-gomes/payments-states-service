@@ -7,7 +7,7 @@ public class PaymentOperation {
 	
 	private final String externalReferenceId;
 	private final String paymentId;
-	private final String protocol;
+	private final String orderId;
 	private final OperationType operationType;
 	
 	private PaymentsStatus status;
@@ -19,7 +19,7 @@ public class PaymentOperation {
 	public PaymentOperation(
 			String externalReferenceId,
 			String paymentId,
-			String protocol,
+			String orderId,
 			OperationType operationType,
 			PaymentsStatus status, 
 			OffsetDateTime createdAt,
@@ -32,8 +32,8 @@ public class PaymentOperation {
 		this.paymentId = requireNonBlank(
 				paymentId, "paymentId"
 				);
-		this.protocol = requireNonBlank(
-				protocol, "protocol"
+		this.orderId = requireNonBlank(
+				orderId, "protocol"
 				);
 		this.operationType = Objects.requireNonNull(
 				operationType,
@@ -67,8 +67,8 @@ public class PaymentOperation {
 	public String getPaymentId() {
 		return paymentId;
 	}
-	public String getProtocol() {
-		return protocol;
+	public String getOrderId() {
+		return orderId;
 	}
 	public OperationType getOperationType() {
 		return operationType;
