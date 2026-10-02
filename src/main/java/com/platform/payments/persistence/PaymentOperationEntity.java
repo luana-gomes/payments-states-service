@@ -8,7 +8,14 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "payment_operation")
+@Table(
+		name = "payment_operation",
+		uniqueConstraints = @UniqueConstraint(
+				name = "uq_payment_operation_card_type",
+				columnNames = {"payment_card_id", "operation_type"}
+				)
+
+		)
 public class PaymentOperationEntity {
 
     @Id

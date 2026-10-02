@@ -47,5 +47,69 @@ class PaymentOperationMapperTest {
         assertEquals(status, entity.getStatus());
         assertEquals(createdAt, entity.getCreatedAt());
         assertEquals(updatedAt, entity.getUpdatedAt());
+    };
+    
+    @Test 
+    void shouldMapAuthorizationAndCaptureForSamePaymentCard() {
+    	Long paymentCardId = 10L;
+    	UUID tennatId = UUID.randomUUID();
+    	OffsetDateTime createdAt = OffsetDateTime.now();
+    	
+    	PaymentOperation authorization = new PaymentOperation(
+    			paymentCardId,
+    			tennatId,
+    			"1015",
+    			"MP",
+    			OperationType.AUTHORIZATION,
+    			PaymentsStatus.APPROVED,
+    			createdAt,
+    			createdAt.plusMinutes(3)
+    			);
+    	PaymentOperation capture = new PaymentOperation(
+    			paymentCardId,
+    			tennatId,
+    			"1016",
+    			"MP",
+    			OperationType.CAPTURE,
+    			PaymentsStatus.APPROVED,
+    			createdAt.plusMinutes(3),
+    			createdAt.plusMinutes(3)
+    			);
+    	   PaymentOperationEntity authorizationEntity = mapper.toEntity(authorization);
+    	    PaymentOperationEntity captureEntity = mapper.toEntity(capture);
+    	    assertEquals(paymentCardId, authorizationEntity.getPaymentCardId());
+    	    assertEquals(paymentCardId, captureEntity.getPaymentCardId());
+    	    assertEquals(OperationType.AUTHORIZATION, authorizationEntity.getOperationType());
+    	    assertEquals(OperationType.CAPTURE, captureEntity.getOperationType());
+    };
+    
+    @Test
+    void shouldMapEntityToDomain() {
+
+        Long paymentCardId = 10L;
+        UUID tenantId = UUID.randomUUID();
+        OffsetDateTime createdAt = OffsetDateTime.now();
+        OffsetDateTime updatedAt = createdAt.plusMinutes(5);
+
+        PaymentOperationEntity entity = new PaymentOperationEntity();
+        entity.setPaymentCardId(paymentCardId);
+        entity.setTenantId(tenantId);
+        entity.setExternalReferenceId("1015");
+        entity.setAcquirer("MP");
+        entity.setOperationType(OperationType.AUTHORIZATION);
+        entity.setStatus(PaymentsStatus.APPROVED);
+        entity.setCreatedAt(createdAt);
+        entity.setUpdatedAt(updatedAt);
+
+        PaymentOperation domain = mapper.toDomain(entity);
+
+        assertEquals(paymentCardId, domain.getPaymentCardId());
+        assertEquals(tenantId, domain.getTenantId());
+        assertEquals("1015", domain.getExternalReferenceId());
+        assertEquals("MP", domain.getAcquirer());
+        assertEquals(OperationType.AUTHORIZATION, domain.getOperationType());
+        assertEquals(PaymentsStatus.APPROVED, domain.getStatus());
+        assertEquals(createdAt, domain.getCreatedAt());
+        assertEquals(updatedAt, domain.getUpdatedAt());
     }
 }
