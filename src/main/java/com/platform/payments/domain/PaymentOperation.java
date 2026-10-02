@@ -38,9 +38,15 @@ public class PaymentOperation {
                 "tenantId must not be null"
         );
 
-        this.externalReferenceId = externalReferenceId;
+        this.externalReferenceId = Objects.requireNonNull(
+                externalReferenceId,
+                "externalReferenceId must not be null"
+        );
 
-        this.acquirer = acquirer;
+        this.acquirer = Objects.requireNonNull(
+                acquirer,
+                "acquirer must not be null"
+        );
 
         this.operationType = Objects.requireNonNull(
                 operationType,

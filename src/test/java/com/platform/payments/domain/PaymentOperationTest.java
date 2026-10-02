@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PaymentOperationTest {
@@ -65,23 +64,53 @@ class PaymentOperationTest {
     }
 
     @Test
-    void shouldAllowNullExternalReferenceIdAndAcquirer() {
+    void shouldRejectNullExternalReferenceId() {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        PaymentOperation operation = new PaymentOperation(
-                PAYMENT_CARD_ID,
-                TENANT_ID,
-                null,
-                null,
-                OperationType.AUTHORIZATION,
-                PaymentsStatus.PENDING,
-                now,
-                now
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> new PaymentOperation(
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        null,
+                        "MP",
+                        OperationType.AUTHORIZATION,
+                        PaymentsStatus.PENDING,
+                        now,
+                        now
+                )
         );
 
-        assertNull(operation.getExternalReferenceId());
-        assertNull(operation.getAcquirer());
+        assertEquals(
+                "externalReferenceId must not be null",
+                exception.getMessage()
+        );
+    }
+
+    @Test
+    void shouldRejectNullAcquirer() {
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> new PaymentOperation(
+                        PAYMENT_CARD_ID,
+                        TENANT_ID,
+                        "1015",
+                        null,
+                        OperationType.AUTHORIZATION,
+                        PaymentsStatus.PENDING,
+                        now,
+                        now
+                )
+        );
+
+        assertEquals(
+                "acquirer must not be null",
+                exception.getMessage()
+        );
     }
 
     @Test
