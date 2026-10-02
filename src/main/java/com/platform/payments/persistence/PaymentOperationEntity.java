@@ -36,7 +36,7 @@ public class PaymentOperationEntity {
     private String acquirer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "operation_type", nullable = false, length = 30)
+    @Column(name = "operation_type", nullable = false, length = 50)
     private OperationType operationType;
 
     @Enumerated(EnumType.STRING)
