@@ -24,12 +24,24 @@ class PaymentsStatusTest {
     }
 
     @Test
+    void shouldHaveErrorStatus() {
+        assertNotNull(PaymentsStatus.ERROR);
+    }
+
+    @Test
+    void shouldHaveInDoubtStatus() {
+        assertNotNull(PaymentsStatus.IN_DOUBT);
+    }
+
+    @Test
     void shouldHaveExactlyExpectedPaymentStatuses() {
         assertEquals(
                 Set.of(
                         PaymentsStatus.PENDING,
                         PaymentsStatus.APPROVED,
-                        PaymentsStatus.DENIED
+                        PaymentsStatus.DENIED,
+                        PaymentsStatus.ERROR,
+                        PaymentsStatus.IN_DOUBT
                 ),
                 Set.of(PaymentsStatus.values())
         );
